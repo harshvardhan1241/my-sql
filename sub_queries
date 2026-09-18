@@ -6,3 +6,23 @@ WHERE
 extract(month from job_posted_date) = 1
 )
 as job_january
+
+
+
+select 
+company_id,
+job_no_degree_mention
+from job_postings_fact
+where job_no_degree_mention = true
+
+
+
+SELECT 
+cd.company_id,
+cd.name
+FROM company_dim as cd
+WHERE company_id IN (
+  SELECT company_id
+  FROM job_postings_fact as jpf
+  WHERE job_no_degree_mention IS TRUE
+);
