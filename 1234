@@ -1,0 +1,8 @@
+SELECT
+*
+from
+(SELECT * from job_postings_fact
+WHERE
+extract(month from job_posted_date) = 1
+)
+as job_january
