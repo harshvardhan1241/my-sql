@@ -1,32 +1,37 @@
-# 📊 SQL Practice & Analytics Portfolio
+# 🗄️ SQL Practice Portfolio
 
-Welcome to my SQL practice repository! This project contains a collection of advanced SQL queries and problem-solving exercises designed to extract meaningful insights from data analyst job posting datasets. 
+Welcome to my SQL practice repository! This project serves as a centralized portfolio for my SQL scripts, query optimizations, and data analysis exercises. 
 
-All queries are written and optimized specifically for **PostgreSQL**.
-
----
-
-## 🛠️ Tech Stack & Environment
-* **Database Engine:** PostgreSQL 16+
-* **Interface Tool:** pgAdmin 4 / VS Code SQL Tools
-* **Dataset Focus:** Technology job postings, company dimensions, and technical skill matrices.
+The primary goal of this repository is to demonstrate data retrieval proficiency, structural optimization, and business logic implementation using relational databases.
 
 ---
 
-## 💡 Key SQL Concepts Applied
-* **Subqueries & Common Table Expressions (CTEs):** Used to isolate and stage complex data before processing, optimizing query execution speed.
-* **Conditional Logic (`CASE WHEN`):** Utilized to dynamically segment data tiers (e.g., categorizing company sizes based on live job volumes).
-* **Aggregate Functions (`COUNT`, `SUM`, `AVG`):** Grouped by entities to identify high-level workforce and hiring trends.
-* **Advanced Joins:** Combining relational dimension tables (`skills_dim`, `companies_dim`) with core fact tables (`job_postings_fact`) without data loss.
+## 🛠️ Tech Stack
+* **Database Engine:** PostgreSQL
+* **Tooling:** pgAdmin / VS Code / DBeaver
 
 ---
 
-## 🚀 Featured Problems & Solutions
+## 🧠 Core SQL Concepts Covered
+* **Multi-Table Joins:** Connecting fact and dimension tables via `INNER`, `LEFT`, and `RIGHT JOIN`.
+* **Subqueries & CTEs:** Breaking complex requirements into modular, high-performance execution steps.
+* **Aggregations & Grouping:** Using `GROUP BY`, `HAVING`, and aggregate functions (`COUNT`, `SUM`, `AVG`).
+* **Data Transformation:** Using `CASE WHEN` statements for conditional analysis and data binning.
 
-### 1. Top 5 Most In-Demand Skills
-* **Objective:** Find the 5 most frequently requested skill IDs and translate them to human-readable names.
-* **Logic:** Leverages an inner subquery to aggregate and sort high-volume mapping tables first, performing a highly efficient `JOIN` only on the top 5 filtered results.
+---
 
-### 2. Company Hiring Tier Segmentation
-* **Objective:** Categorize companies into 'Small', 'Medium', or 'Large' buckets based on their total open job counts.
-* **Logic:** Groups millions of raw job postings by company ID, aggregates total metrics, and applies multi-conditional `CASE` logic to the compressed summary.
+## 📂 Repository Structure
+* `/scripts` - Clean, commented `.sql` query files organized by problem type.
+* `/data` - Database schemas, data dictionaries, or setup scripts (if applicable).
+
+---
+
+## 🚀 Featured Queries & Logic
+
+### 🔹 Top Skill Demands (Subqueries & Joins)
+* **Goal:** Identify the most frequently appearing entities from a high-volume mapping table.
+* **Approach:** Aggregates and limits data within an inner subquery first to maximize query performance before joining text dimensions.
+
+### 🔹 Business Tier Classification (Conditional Logic)
+* **Goal:** Dynamically segment entities into categorical buckets based on volume thresholds.
+* **Approach:** Utilizes `COUNT(*)` windowed logic paired with a `CASE` statement to divide data into 'Small', 'Medium', and 'Large' buckets.
