@@ -2,7 +2,7 @@
 remote job postings. Display the skill ID, skill name,
  and the total number of remote job postings requiring
   each skill, ordered from highest to lowest demand.*/
-
+-- add on for the data analyst
 
 with remote_jobs as (
 --this is for finding for remote jobs here is not need of sub query or cte because we are not using any aggregate function in the select statement.
@@ -20,6 +20,8 @@ on
 job_postings.job_id = skills_to_job.job_id
 where
 job_postings.job_work_from_home = TRUE
+and
+job_postings.job_title_short='Data Analyst'
 group by skill_id,job_postings.job_work_from_home
 )
 select
