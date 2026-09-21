@@ -20,12 +20,6 @@ The primary goal of this repository is to demonstrate data retrieval proficiency
 
 ---
 
-## 📂 Repository Structure
-* `/scripts` - Clean, commented `.sql` query files organized by problem type.
-* `/data` - Database schemas, data dictionaries, or setup scripts (if applicable).
-
----
-
 ## 🚀 Featured Queries & Logic
 
 ### 🔹 Top Skill Demands (Subqueries & Joins)
