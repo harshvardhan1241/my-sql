@@ -241,6 +241,28 @@ FROM
 retail_sale as rs
 GROUP BY rs.category
 
+-- Q.10 Write a SQL query to create each shift and number of orders (Example Morning <=12, Afternoon Between 12 & 17, Evening >17)
+with hourly_salary as (
+SELECT*,
+CASE
+WHEN extract(HOUR from sale_time )< 12 then 'Morning'
+WHEN extract(HOUR from sale_time ) BETWEEN 12 and 17 then 'Afternoon'
+ELSE 'Evening'
+END as shift
+FROM
+retail_sale
+)
+
+SELECT
+count(transactions_id) as total_orders,
+shift
+FROM
+hourly_salary
+GROUP BY
+shift
+ORDER BY
+total_orders DESC
+
 
 
 
