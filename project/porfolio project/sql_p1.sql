@@ -148,3 +148,14 @@ rs.quantiy>3
 AND
 EXTRACT(MONTH FROM rs.sale_date) = 11 
   AND EXTRACT(YEAR FROM rs.sale_date) = 2022;
+
+
+-- Q.3 Write a SQL query to calculate the total sales (total_sale) for each category.
+
+SELECT
+rs.category,
+sum(total_sale) as net_sale,
+count(total_sale) as total_order
+FROM
+retail_sale as rs
+GROUP BY rs.category
