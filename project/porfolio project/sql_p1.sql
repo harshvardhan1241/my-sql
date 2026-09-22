@@ -159,3 +159,92 @@ count(total_sale) as total_order
 FROM
 retail_sale as rs
 GROUP BY rs.category
+
+-- Q.4 Write a SQL query to find the average age of customers who purchased items from the 'Beauty' category.
+SELECT
+round(avg(age),2) as avg_age
+FROM
+retail_sale as rs
+WHERE
+rs.category = 'Beauty'
+
+-- Q.5 Write a SQL query to find all transactions where the total_sale is greater than 1000.
+SELECT
+*
+FROM
+retail_sale as rs
+WHERE
+rs.total_sale>=1000
+ORDER BY
+rs.sale_date
+
+-- Q.6 Write a SQL query to find the total number of transactions (transaction_id) made by each gender in each category.
+SELECT
+sum(rs.transactions_id) as total_transaction,
+rs.category,
+rs.gender
+FROM
+retail_sale as rs
+GROUP BY
+rs.category,
+rs.gender
+ORDER BY
+rs.category,
+rs.gender
+
+
+-- Q.7 Write a SQL query to calculate the average sale for each month. Find out best selling month in each year
+with rank_month as
+(
+SELECT
+ Extract(year from rs.sale_date) as year,
+ Extract(month from rs.sale_date)as month,
+round(avg(total_sale),2) as avg_sale,
+--for getting order of the month and year
+rank()over(PARTITION by extract(year from rs.sale_date)
+ORDER BY avg(total_sale ) DESC) as rank
+FROM
+retail_sale as rs
+GROUP BY 
+year,month)
+
+SELECT
+year,
+month,
+avg_sale
+FROM
+rank_month 
+WHERE
+rank='1'
+--order BY year,avg_sale DESC
+
+--same qustion can solve with conditon
+
+-- Q.8 Write a SQL query to find the top 5 customers based on the highest total sales 
+
+SELECT
+ rs.customer_id,
+sum(rs.total_sale) as total_sales
+FROM
+retail_sale as rs
+GROUP BY
+rs.customer_id
+ORDER BY
+total_sales DESC
+LIMIT 5
+
+-- Q.9 Write a SQL query to find the number of unique customers who purchased items from each category.
+SELECT
+count(DISTINCT rs.customer_id) as count_of_unique_class,
+rs.category
+FROM
+retail_sale as rs
+GROUP BY rs.category
+
+
+
+
+
+
+
+
