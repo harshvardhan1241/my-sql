@@ -123,3 +123,24 @@ DETAIL: Key (issued_id)=(IS101) is not present in table "issued_status".
 psql: error: utility failed with exit code: 1
 
 so we delete that colum of innfo from csv file 
+filnaly after 4 atempt we clear it all */
+
+-- verifcation of data
+SELECT*
+FROM books
+
+SELECT*
+FROM branch
+
+SELECT*
+FROM employees
+
+SELECT*
+FROM issued_status
+
+SELECT*
+FROM members
+
+SELECT*
+FROM return_status
+--all work
