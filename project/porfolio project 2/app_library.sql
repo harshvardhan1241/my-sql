@@ -40,3 +40,14 @@ CREATE TABLE members(
     member_address VARCHAR(75),
     reg_date DATE
 )
+
+--create tabel for issued_status
+DROP TABLE if EXISTS issued_status;
+CREATE TABLE issued_status(
+issued_id VARCHAR(10),
+issued_member_id VARCHAR(10),
+issued_book_name VARCHAR(75),
+issued_date DATE,
+issued_book_isbn VARCHAR(20),
+issued_emp_id VARCHAR(10)
+)
