@@ -95,3 +95,5 @@ ALTER TABLE return_status
 ADD CONSTRAINT  fk_issued_status
 FOREIGN KEY (issued_id)
 REFERENCES  issued_status (issued_id)
+
+--info inserting
