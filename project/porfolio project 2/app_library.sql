@@ -154,10 +154,10 @@ FROM return_status
 
 
 -- Task 3: Delete a Record from the Issued Status Table
--- Objective: Delete the record with issued_id = 'IS104' from the issued_status table.
+-- Objective: Delete the record with issued_id = 'IS109' from the issued_status table.
 
 -- Task 4: Retrieve All Books Issued by a Specific Employee
--- Objective: Select all books issued by the employee with emp_id = 'E101'.
+-- Objective: Select all books issued by the employee with emp_id = 'E110'.
 
 
 -- Task 5: List Members Who Have Issued More Than One Book
@@ -244,3 +244,40 @@ VALUES('978-1-60129-456-2', 'To Kill a Mockingbird', 'Classic', '6.00', 'yes', '
 SELECT*FROM books
 
 -- Task 2: Update an Existing Member's Address
+UPDATE members
+set 
+member_address ='125 Main st'
+WHERE member_id='C101'
+SELECT* FROM members
+
+-- Task 3: Delete a Record from the Issued Status Table
+-- Objective: Delete the record with issued_id = 'IS109' from the issued_status table.
+SELECT* FROM issued_status
+
+DELETE FROM issued_status
+WHERE issued_id = 'IS109'
+--SO THIS COMMAND WILL NEVER RUN BECAUSE THIS IS CONNECTED WITH FORIEN KEY SO WE ARE DOING SOMETHING DIFFERNT
+--WE ARE DELETE FROM RETUN STAATUS FIST THEN WE WILL DELETE FROM ISSUED
+--USING WITH CTE 
+--we create the sub qurery in the main qurey named as deleted_return
+WITH deleted_return as
+(DELETE from return_status
+WHERE issued_id='IS109')
+
+DELETE FROM issued_status
+WHERE issued_id = 'IS109'
+
+-- Task 4: Retrieve All Books Issued by a Specific Employee
+-- Objective: Select all books issued by the employee with emp_id = 'E110'.
+
+/*here the we have all info in the single but if that is never given
+we need to left joint to the fist employ id and issuedd employer id fist using of both tabel
+then we are left joint issued_book_id to the isbn of book tabel and issued_status
+then applied conditon */
+
+SELECT*
+FROM  issued_status 
+WHERE issued_emp_id ='E110'
+ORDER by issued_date desc
+
+
