@@ -280,4 +280,42 @@ FROM  issued_status
 WHERE issued_emp_id ='E110'
 ORDER by issued_date desc
 
+-- Task 5: List Members Who Have Issued More Than One Book
+-- Objective: Use GROUP BY to find members who have issued more than one book.
+/*
 
+we used the count ffunction to get the value of the issued mamenger that is repated
+then we are make colunm and gropu by them and we can not use the where function so we use having syntax */
+
+SELECT
+issued_member_id ,
+count(*) as issue_Count
+from issued_status
+GROUP by issued_member_id
+HAVING count(*) >'1'
+
+-- ### 3. CTAS (Create Table As Select)
+
+-- Task 6: Create Summary Tables**: Used CTAS to generate new tables based on query results - each book and total book_issued_cnt
+--so we do the left joint alsp we use count function and group by for find no. of each 
+--in group by we use for combine the row having the same values 
+create TABLE  book_count AS
+SELECT
+b.isbn,
+count(i_s.issued_id) as total_book_issue
+from books as b
+LEFT JOIN
+issued_status as i_s
+ON
+b.isbn=i_s.issued_book_isbn
+GROUP BY
+b.isbn
+
+SELECT *
+FROM 
+book_count
+
+
+-- ### 4. Data Analysis & Findings
+
+-- Task 7. **Retrieve All Books in a Specific Category:
