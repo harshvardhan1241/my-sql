@@ -319,3 +319,81 @@ book_count
 -- ### 4. Data Analysis & Findings
 
 -- Task 7. **Retrieve All Books in a Specific Category:
+--i done the find the no. of book in each category
+SELECT
+category,
+count(book_title)  as book_count
+FROM
+books
+GROUP BY
+category
+--
+SELECT*
+from books
+WHERE category='Classic'
+
+-- Task 8: Find Total Rental Income by Category
+select 
+b.category,
+sum(b.rental_price) as rental_income,
+count(b.book_title)  as book_count
+FROM
+books as b
+LEFT JOIN
+issued_status as i_s
+on i_s.issued_book_isbn =b.isbn
+GROUP by 
+b.category
+/*fist i claocutale only the relat priice through book tabel
+but the relat inscume is based on the how mauch that book has been given to rent
+*/
+
+
+-- Task 9. **List Members Who Registered in the Last 180 Days**:
+SELECT*
+FROM members
+WHERE
+reg_date >= CURRENT_DATE - interval '180 days'
+
+INSERT into members (member_id,member_name,member_address,reg_date)
+VALUES('C120','Deva Brown','133 Brich st','2026-08-10'),
+('C121', 'Rahul Sharma', '45 MG Road', '2026-08-12'),
+('C122', 'Priya Patel', '78 Shivaji Nagar', '2026-08-15'),
+('C123', 'Amit Verma', '22 FC Road', '2026-08-18');
+
+
+-- Task 10: List Employees with Their Branch Manager's Name and their branch details**
+SELECT*
+from branch
+select*
+from employees
+
+SELECT
+emp2.emp_name as employs,
+b.manager_id,
+emp.*
+from 
+employees as emp
+ JOIN
+branch as b
+ON
+emp.branch_id=b.branch_id
+JOIN
+employees as emp2
+on b.manager_id= emp2.emp_id
+
+-- Task 11. Create a Table of Books with Rental Price Above a Certain Threshold 5
+create TABLE  rental_price_of_each_book AS
+SELECT
+book_title,
+rental_price
+FROM
+books
+WHERE
+rental_price >'5'
+
+SELECT*
+FROM
+rental_price_of_each_book
+
+-- Task 12: Retrieve the List of Books Not Yet Returned
