@@ -532,3 +532,48 @@ WHERE issued_id= 'IS135'
 
 --working function
 call add_return_record('R138', 'IS135','good');
+
+/*
+Task 15: Branch Performance Report
+Create a query that generates a performance report for each branch, showing the number of books issued, the number of books returned, and the total revenue generated from book rentals.
+*/
+---SELECT*FROM branch
+--SELECT* FROM issued_status
+--SELECT*FROM employees
+SELECT* FROM books
+--SELECT* from return_status
+
+CREATE TABLE branch_rport AS
+
+SELECT
+b.branch_id,
+b.manager_id,
+count(ist.issued_id) as number_of_book_issued,
+count(rst.return_id) as number_of_book_return,
+sum(bk.rental_price) as total_revenue
+FROM 
+issued_status as ist 
+JOIN 
+employees as emp
+on emp.emp_id = ist.issued_emp_id
+join
+branch as b
+on b.branch_id=emp.branch_id
+left join
+return_status as rst
+on rst.issued_id =ist.issued_id
+join
+books as bk
+on ist.issued_book_isbn=bk.isbn
+GROUP BY
+b.branch_id,
+b.manager_id
+
+select* from branch_rport
+
+/*
+Task 16: CTAS: Create a Table of Active Members
+Use the CREATE TABLE AS (CTAS) statement to create a new table active_members containing members who have issued at least one book in the last 6 months.
+*/
+
+
