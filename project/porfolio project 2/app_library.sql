@@ -665,11 +665,11 @@ BEGIN
 if v_status ='yes' then
         insert into issued_status(issued_id, issued_member_id,issued_date, issued_book_isbn,issued_emp_id)
         VALUES
-        (p_issued_id,p_issued_member_id,CURRENT_DATE,p_issued_book_isbn,p_issued_emp_id);
+        (p_issued_id ,p_issued_member_id, CURRENT_DATE, p_issued_book_isbn, p_issued_emp_id);
     
         UPDATE books
         SET status = 'no'
-        WHERE isbn = issued_book_isbn;
+        WHERE isbn = p_issued_book_isbn;
         RAISE notice 'book record added sucessfully for book_isbn:%',p_issued_book_isbn;
 ELSE --else not avilabe then logiv=c
         RAISE notice 'soory to inform you the book you requested is unavilable book_isbn:%',p_issued_book_isbn;
@@ -687,4 +687,39 @@ SELECT* from issued_status
 --WHERE issued_book_isbn ='978-0-375-41398-8' --for issuedd id is IS134 member id C107
 WHERE issued_book_isbn ='978-0-14-044930-3' --for issuedd id is IS115 member_id C109
 
-call issued_book()
+CALL issue_book('IS175', 'C108', '978-0-553-29698-2', 'E104');
+
+--for every now intery we need to inter new issued_id and for every return we need to retun_id
+
+/*
+Task 20: Create Table As Select (CTAS)
+Objective: Create a CTAS (Create Table As Select) query to identify overdue books and calculate fines.
+
+Description: Write a CTAS query to create a new table that lists each member and the books they have issued but not returned within 30 days. The table should include:
+    The number of overdue books.
+    The total fines, with each day's fine calculated at $0.50.
+    The number of books issued by each member.
+    The resulting table should show:
+    Member ID
+    Number of overdue books
+    Total fines */
+     
+     CREATE TABLE resulting_table AS
+
+     SELECT
+     ist.issued_member_id,
+     count(*) as over_due_books,
+     sum((CURRENT_DATE-ist.issued_date)*0.50) as total_fine
+    FROM
+    issued_status as ist
+    left JOIN
+    return_status as rst 
+    ON rst.issued_id=ist.issued_id
+    WHERE rst.return_date is NULL
+    and CURRENT_DATE-ist.issued_date > 30
+    GROUP BY
+    ist.issued_member_id
+    ORDER BY
+    sum((CURRENT_DATE-ist.issued_date)*0.50) DESC
+
+    SELECT* FROM resulting_table
