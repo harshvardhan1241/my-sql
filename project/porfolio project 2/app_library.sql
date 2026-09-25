@@ -473,3 +473,62 @@ WHERE
 rst.return_date is NULL
 AND
 CURRENT_DATE-ist.issued_date >30
+
+
+--Task 14: Update Book Status on Return
+--Write a query to update the status of books in the books table to "available" when they are returned (based on entries in the return_status table).
+
+--store prosudure
+CREATE or REPLACE  procedure add_return_record (p_return_id varchar(10),p_issued_id varchar(10), p_book_quality varchar(15))
+language plpgsql
+as $$
+
+declare
+ v_isbn varchar(50);
+ v_book_name varchar(80);
+
+begin
+--all logic and procedure we are gone do are come here
+--inserting into return based on user input
+INSERT into return_status (return_id, issued_id, return_date, book_quality)
+VALUES(p_return_id, p_issued_id, CURRENT_DATE, p_book_quality);
+        --update status in books
+-- we create the tempery system for geting isbn for the status update through veriable 
+SELECT 
+issued_book_isbn,
+issued_book_name
+into 
+v_isbn,
+v_book_name
+FROM 
+ issued_status
+WHERE 
+issued_id= p_issued_id;
+
+UPDATE books
+SET status = 'yes'
+WHERE isbn = v_isbn;
+--for the notification that book has been updated
+RAISE notice 'thank you for the returning the book : %',v_book_name ;  
+
+end;
+$$
+--after this next person only do the isert the record
+call add_return_records ();
+
+
+--Testing FUNCTION add_return_records
+issued_id= IS135
+ISBN = WHERE isbn= '978-0-307-58837-1'
+
+SELECT * FROM books
+WHERE isbn ='978-0-307-58837-1'
+
+SELECT* FROM issued_status
+WHERE issued_book_isbn =' 978-0-307-58837-1';
+
+DELETE FROM return_status
+WHERE issued_id= 'IS135'
+
+--working function
+call add_return_record('R138', 'IS135','good');
