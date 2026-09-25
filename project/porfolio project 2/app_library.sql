@@ -445,8 +445,31 @@ SELECT * FROM return_status;
 ### Advanced SQL Operations
 
 Task 13: Identify Members with Overdue Books
-Write a query to identify members who have overdue books (assume a 30-day return period). Display the member's name, book title, issue date, and days overdue.
+Write a query to identify members who have overdue books (assume a 30-day return period).
+ Display the member's name, book title, issue date, and days overdue.
 */
 
+--issued_status joint with member and member joint with book and then we connect retun status
+--filter out book that is retur
+--if overduve is >30 day the issue day is less than 30 day it not cosider as not overdue
 
 
+SELECT
+ist.issued_member_id,
+m.member_name,
+b.book_title,
+ist.issued_date,
+rst.return_date,
+CURRENT_DATE-ist.issued_date as over_due_days
+FROM issued_status as ist 
+inner join members as m 
+on  m.member_id = ist.issued_member_id 
+INNER join books as b 
+on b.isbn =ist.issued_book_isbn
+LEFT join --here we used left joint because inner joint make the that intrres that is commen in all
+return_status as rst 
+on rst.issued_id =ist.issued_id
+WHERE
+rst.return_date is NULL
+AND
+CURRENT_DATE-ist.issued_date >30
