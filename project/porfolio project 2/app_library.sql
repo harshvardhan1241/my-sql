@@ -575,5 +575,116 @@ select* from branch_rport
 Task 16: CTAS: Create a Table of Active Members
 Use the CREATE TABLE AS (CTAS) statement to create a new table active_members containing members who have issued at least one book in the last 6 months.
 */
+CREATE TABLE active_members as
+SELECT * from members
+WHERE member_id in (
+SELECT
+issued_member_id
+FROM
+issued_status
+WHERE
+issued_date > CURRENT_DATE - interval '6 month'
+)
+SELECT * from 
+active_members
+
+/*
+Task 17: Find Employees with the Most Book Issues Processed
+Write a query to find the top 3 employees who have processed the most book issues. Display the employee name, number of books processed, and their branch.
+*/
+
+SELECT
+emp.emp_name,
+b.*,
+count(ist.issued_id) as number_of_book_issed
+FROM
+issued_status as ist 
+join 
+employees as emp 
+on emp.emp_id = ist.issued_emp_id
+join
+branch as b
+on emp.branch_id=b.branch_id
+GROUP BY 1,2
+
+/*
+Task 18: Identify Members Issuing High-Risk Books
+Write a query to identify members who have issued books more than twice with the status "damaged" in the books table. Display the member name, book title, and the number of times they've issued damaged books. */
+SELECT* FROM return_status
+SELECT* FROM issued_status
+SELECT* FROM members
+
+SELECT
+m.member_id,
+m.member_name,
+ist.issued_book_name,
+count(ist.issued_id) as damaged_book
+FROM 
+issued_status as ist
+JOIN
+return_status as rst
+on rst.issued_id = ist.issued_id
+join
+members as m
+on ist.issued_member_id=m.member_id
+WHERE
+rst.book_quality='Damaged'
+GROUP BY 1,3
+-- if find more tha two book you need to run 
+HAVING
+count(ist.issued_id) >2
+
+/*
+Task 19: Stored Procedure
+Objective: Create a stored procedure to manage the status of books in a library system.
+    Description: Write a stored procedure that updates the status of a book based on its issuance or return. Specifically:
+    If a book is issued, the status should change to 'no'.
+    If a book is returned, the status should change to 'yes'.
+*/
+SELECT* from books
+SELECT * from issued_status
+
+create or replace procedure issue_book(p_issued_id varchar(10),p_issued_member_id varchar(30),p_issued_book_isbn varchar(30),p_issued_emp_id varchar(10))
+language plpgsql
+as 
+$$
+declare
+--all vairable delcare here
+v_status varchar(10);
+
+BEGIN
+--all code we write here
+    select 
+    status
+    into 
+    v_status
+    from books
+    where isbn= p_issued_book_isbn;
+
+    -- if avilabel logic
+if v_status ='yes' then
+        insert into issued_status(issued_id, issued_member_id,issued_date, issued_book_isbn,issued_emp_id)
+        VALUES
+        (p_issued_id,p_issued_member_id,CURRENT_DATE,p_issued_book_isbn,p_issued_emp_id);
+    
+        UPDATE books
+        SET status = 'no'
+        WHERE isbn = issued_book_isbn;
+        RAISE notice 'book record added sucessfully for book_isbn:%',p_issued_book_isbn;
+ELSE --else not avilabe then logiv=c
+        RAISE notice 'soory to inform you the book you requested is unavilable book_isbn:%',p_issued_book_isbn;
+END if;
+END;
+$$
 
 
+--testing
+SELECT* FROM books
+--978-0-375-41398-8 is no
+--978-0-14-044930-3 is yes
+
+SELECT* from issued_status
+--WHERE issued_book_isbn ='978-0-375-41398-8' --for issuedd id is IS134 member id C107
+WHERE issued_book_isbn ='978-0-14-044930-3' --for issuedd id is IS115 member_id C109
+
+call issued_book()
