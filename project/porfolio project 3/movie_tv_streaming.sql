@@ -30,7 +30,7 @@ SELECT*FROM neflix_titles
 3. List all movies released in a specific year (e.g., 2020)
 4. Find the top 5 countries with the most content on Netflix
 5. Identify the longest movie
-6. Find content added in the last 5 years
+6. Find content added in the last 7 years
 7. Find all the movies/TV shows by director 'Rajiv Chilaka'!
 8. List all TV shows with more than 5 seasons
 9. Count the number of content items in each genre
@@ -106,5 +106,55 @@ FROM neflix_titles
 GROUP BY 1
 ORDER BY 2 DESC
 LIMIT 5;
+
 --5. Identify the longest movie
-SELECT*FROM neflix_titles 
+SELECT
+title,
+type,
+duration
+FROM neflix_titles
+WHERE type = 'Movie'
+and duration is not NULL
+ORDER BY
+ CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER) DESC
+limit 1;
+
+--6. Find content added in the last 7 years
+
+SELECT
+*
+FROM 
+neflix_titles
+WHERE
+date_added >= CURRENT_DATE -INTERVAL'7 years'
+
+--7. Find all the movies/TV shows by director 'Rajiv Chilaka'!
+SELECT
+*
+FROM
+neflix_titles 
+WHERE director LIKE'%Rajiv Chilaka%'
+
+--8. List all TV shows with more than 5 seasons
+
+--for the most no. of sesons show
+SELECT
+title,
+type,
+duration
+FROM neflix_titles
+WHERE type = 'TV Show'
+and duration is not NULL
+ORDER BY
+ CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER) DESC
+limit 1;
+
+-- TV shows with more than 5 seasons with desc order
+SELECT
+title,
+type,
+duration
+FROM neflix_titles
+WHERE type = 'TV Show' AND
+ CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER) > 5
+ order BY  CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER)  DESC
