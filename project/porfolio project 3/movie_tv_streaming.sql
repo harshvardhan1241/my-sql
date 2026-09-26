@@ -224,3 +224,27 @@ GROUP BY 1
 order by 2 desc
 LIMIT 10;
 
+/*15.
+Categorize the content based on the presence of the keywords 'kill' and 'violence' in 
+the description field. Label content containing these keywords as 'Bad' and all other 
+content as 'Good'. Count how many items fall into each category.*/
+with new_tabel as (
+SELECT
+*,
+case
+when 
+    description LIKE '%kill%'
+    OR
+    description LIKE '%violence%' then 'bad_content'
+    else 'good content'
+    END category
+FROM
+neflix_titles)
+
+
+SELECT
+category,
+count(*) as total_count
+from
+new_tabel
+GROUP BY 1
