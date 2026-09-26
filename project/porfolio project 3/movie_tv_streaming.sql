@@ -157,4 +157,70 @@ duration
 FROM neflix_titles
 WHERE type = 'TV Show' AND
  CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER) > 5
- order BY  CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER)  DESC
+ order BY  CAST(SPLIT_PART(duration, ' ', 1) AS INTEGER) DESC
+
+--9. Count the number of content items in each genre
+SELECT
+count(show_id),
+unnest(string_to_array(listed_in,',')) as gener
+FROM
+neflix_titles 
+GROUP BY 2
+
+--10.Find each year and the average numbers of content release in India on netflix. 
+--return top 5 year with highest avg content release!
+
+SELECT
+ extract (year from date_added) as year,
+ count(*) as _count,
+ round(
+ count(*)::numeric/(SELECT count(*) FROM neflix_titles WHERE country like '%India%')::numeric * 100 ,2) as avg_count_per_year
+FROM
+neflix_titles 
+WHERE country like '%India%'
+group by extract (year from date_added)
+order by extract (year from date_added) 
+
+--11. List all movies that are documentaries
+
+SELECT*
+FROM
+neflix_titles
+WHERE
+type='Movie'
+AND
+listed_in like '%Documentaries%'
+
+--12. Find all content without a director
+SELECT
+*
+FROM
+neflix_titles 
+WHERE director is NULL
+
+--13. Find how many movies actor 'Salman Khan' appeared in last 10 years!
+SELECT
+count(*) 
+FROM
+neflix_titles 
+WHERE
+casts like '%Salman Khan%'
+AND
+release_year > extract(year from CURRENT_DATE)-10
+
+--14. Find the top 10 actors who have appeared in the highest number of movies produced in India.
+SELECT
+--show_id,
+--title,
+unnest(string_to_array(casts,',')) as actor,
+count(*) as apperiance
+FROM
+neflix_titles 
+WHERE
+type='Movie'
+AND
+country like '%India%'
+GROUP BY 1
+order by 2 desc
+LIMIT 10;
+
